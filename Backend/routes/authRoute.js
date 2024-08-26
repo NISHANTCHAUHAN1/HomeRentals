@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer'
-import { register } from '../controllers/authController.js';
+import { login, register } from '../controllers/authController.js';
 const router = express.Router();
 
 const storage = multer.diskStorage({
@@ -15,7 +15,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.post("/register", upload.single("profileImage"), register);
+router.post("/login", login);
 
 export default router;
-
-// npm i bcrypt

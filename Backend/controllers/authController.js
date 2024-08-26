@@ -1,4 +1,5 @@
 import User from "../models/userModel.js";
+import generateToken from "../utils/generateToken.js";
 import TryCatch from "../utils/TryCatch.js";
 import bcrypt from "bcrypt";
 
@@ -18,5 +19,19 @@ export const register = TryCatch(async (req,res) => {
         name, email, password: hashPassword, profileImagePath
     });
 
-    res.status(201).json({user, message: "User Registered"})
+    res.status(201).json({user, message: "User Registered"});
+});
+
+export const login = TryCatch(async(req,res) => {
+    const { email, password} = req.body;
+
+    const user = await User.findOne({ email });
+    if(!user) return res.status(400).json({message: "Incorrect email or password"});
+
+    const comparePassword = await bcrypt.compare(password, user.password);
+    if(!comparePassword) return res.status(400).json({message: "Wrong Password"});
+    
+    generateToken(user._id, res);
+    
+    res.status(200).json({user, message: "Login Succesfully"});
 });

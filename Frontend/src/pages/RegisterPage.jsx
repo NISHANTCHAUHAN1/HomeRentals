@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+// import toast from "react-hot-toast";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -9,7 +11,16 @@ const RegisterPage = () => {
     confirmPassword: "",
     profileImage: "",
   });
-//   console.log(formData);
+  //   console.log(formData);
+  const [passwordMatch, setPasswordMatch] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setPasswordMatch(
+      formData.password === formData.confirmPassword || formData.confirmPassword === ""
+    )
+  })
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -20,6 +31,41 @@ const RegisterPage = () => {
       [name]: name === "profileImage" ? files[0] : value,
     });
   };
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    // console.log(formData);
+    setLoading(true);
+    try {
+      const registerForm = new FormData();
+      for (var key in formData) {
+        registerForm.append(key, formData[key])
+      }
+      const res = await axios.post(
+        "http://localhost:3000/api/user/register",
+        registerForm,{
+          method: "POST",
+          body: registerForm,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+       if(res.data) {
+        // toast.success(res.data.message);
+        setFormData({name: "", email: "", password: ""});
+        navigate("/login");
+       }
+    } catch (error) {
+      console.log(error);
+      // toast.error(error.response.data.message);
+    } finally{
+      setLoading(false);
+    }
+  }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
@@ -33,7 +79,7 @@ const RegisterPage = () => {
         <h2 className="text-2xl font-semibold text-center mb-6">
           Register to RoomRentail
         </h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
               htmlFor="name"
@@ -104,10 +150,11 @@ const RegisterPage = () => {
               name="confirmPassword"
               placeholder="Confrim Password"
               className="common-input"
-              value={formData.confrimPassword}
+              value={formData.confirmPassword}
               onChange={handleChange}
               required
             />
+            {!passwordMatch && ( <p className="text-red-600">Password are not matched</p> )}
           </div>
 
           <div className="mb-4 flex">
@@ -116,16 +163,17 @@ const RegisterPage = () => {
               className="flex items-center gap-2 text-sm font-medium text-gray-700"
             >
               {formData.profileImage ? (
-                <img src={URL.createObjectURL(formData.profileImage)}
+                <img
+                  src={URL.createObjectURL(formData.profileImage)}
                   alt="profile img"
-                  style={{ maxWidth: "80px"}}
-                  />
+                  style={{ maxWidth: "80px" }}
+                />
               ) : (
                 <img
-                src="https://cdn-icons-png.flaticon.com/128/159/159626.png"
-                className="w-8 h-8 cursor-pointer"
-                alt="add profile img"
-              />
+                  src="https://cdn-icons-png.flaticon.com/128/159/159626.png"
+                  className="w-8 h-8 cursor-pointer"
+                  alt="add profile img"
+                />
               )}
               <p className="cursor-pointer">Upload Your Photo</p>
             </label>
@@ -141,7 +189,11 @@ const RegisterPage = () => {
             />
           </div>
 
-          <button className="common-btn">Register</button>
+          {loading ? (
+            <button className="common-btn disabled:opacity-80 disabled:cursor-not-allowed">Please wait...</button>
+          ) : (
+            <button className="common-btn disabled:opacity-80 disabled:cursor-not-allowed" disabled={!passwordMatch}>Register</button>
+          )}
         </form>
 
         <div className="mt-6 text-center">
