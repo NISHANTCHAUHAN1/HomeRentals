@@ -74,10 +74,10 @@ const Navbar = () => {
 
         {dropdownMenu && user &&(
           <div className="absolute bg-white right-15 sm:right-5 top-20 flex flex-col w-48 p-2.5 border border-gray-300 rounded-2xl shadow-lg z-[999]">
-            <Link to={`/${user._id}/trips`}>Trip List</Link>
-            <Link to={`/${user._id}/wishList`}>Wish List</Link>
-            <Link to={`/${user._id}/properties`}>Property List</Link>
-            <Link to={`/${user._id}/reservations`}>Reservation List</Link>
+            <Link to={`/${user?._id}/trips`}>Trip List</Link>
+            <Link to={`/${user?._id}/wishList`}>Wish List</Link>
+            <Link to={`/${user?._id}/properties`}>Property List</Link>
+            <Link to={`/${user?._id}/reservations`}>Reservation List</Link>
             <Link to={`/create-listing`}>Becone A Host</Link>
           </div>
         )} 
