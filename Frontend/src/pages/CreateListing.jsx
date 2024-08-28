@@ -86,7 +86,7 @@ const CreateListing = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-gray-300 py-10 px-12 lg:px-5 pb-30">
+      <div className="bg-gray-300 py-10 px-[20px] lg:px-[40px] pb-30">
         <h1 className="text-slate-700 text-2xl sm:text-3xl font-bold">
           Create Your Listings
         </h1>
