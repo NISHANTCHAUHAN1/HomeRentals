@@ -8,6 +8,7 @@ dotenv.config();
 
 const app = express();
 
+
 app.use(express.json());
 // app.use(cors());
 const corsOptions = {
@@ -19,9 +20,10 @@ app.use(express.static("public"));
 app.use(cookieParser()); 
 
 import userRoute from "./routes/authRoute.js";
+import listingRoute from "./routes/listingRoute.js";
 
 app.use("/api/user", userRoute);
-
+app.use("/api/listing", listingRoute);
 
 const port = process.env.PORT || 3000;
 

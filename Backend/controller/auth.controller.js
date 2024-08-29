@@ -1,7 +1,7 @@
-import User from "../models/userModel.js";
 import generateToken from "../utils/generateToken.js";
 import TryCatch from "../utils/TryCatch.js";
 import bcrypt from "bcrypt";
+import User from "../models/userModel.js";
 
 export const register = TryCatch(async (req,res) => {
     const {name, email, password } = req.body;
@@ -21,6 +21,8 @@ export const register = TryCatch(async (req,res) => {
 
     res.status(201).json({user, message: "User Registered"});
 });
+
+
 
 export const login = TryCatch(async(req,res) => {
     const { email, password} = req.body;
