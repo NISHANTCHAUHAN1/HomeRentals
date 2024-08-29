@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from "axios";
 import { useDispatch, useSelector } from 'react-redux';
 import { setAuthUser } from '../redux/userSlice';
-// import toast from "react-hot-toast";
+import toast from 'react-hot-toast';
 
 const LoginPage = () => {
   const [input, setInput] = useState({
@@ -35,11 +35,11 @@ const LoginPage = () => {
         // console.log(res.data);
         dispatch(setAuthUser(res.data.user));
         navigate("/");
-        // toast.success('Successfully Login!');
+        toast.success('Successfully Login!');
         setInput({ email: "", password: "" });
       }
     } catch (error) {
-      console.log(error);
+       toast.error(error.response.data.message)
     }finally{
       setLoading(false);
     }

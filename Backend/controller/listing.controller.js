@@ -49,5 +49,17 @@ export const createListing = TryCatch(async (req, res) => {
 
   await newListing.save();
 
-  res.status(201).json({newListing});
+  res.status(201).json({newListing, message: "create listing Successfully"});
 });
+
+export const getListing = TryCatch(async(req,res) => {
+  const qCategory = req.query.category;
+
+  let listings;
+  if(qCategory) 
+    return listings = await Listing.find({category: qCategory}).populate("creator");
+  else
+    listings = await Listing.find().populate("creator");
+
+  res.status(200).json({listings});
+})

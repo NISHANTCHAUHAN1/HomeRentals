@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-// import toast from "react-hot-toast";
+import toast from 'react-hot-toast';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -55,13 +55,12 @@ const RegisterPage = () => {
         }
       );
        if(res.data) {
-        // toast.success(res.data.message);
+        toast.success(res.data.message);
         setFormData({name: "", email: "", password: ""});
         navigate("/login");
        }
     } catch (error) {
-      console.log(error);
-      // toast.error(error.response.data.message);
+      toast.error(error.response.data.message);
     } finally{
       setLoading(false);
     }

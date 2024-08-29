@@ -5,6 +5,10 @@ import { MdAddCircleOutline, MdRemoveCircleOutline } from "react-icons/md";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { IoIosImages } from "react-icons/io";
 import { BiTrash } from "react-icons/bi";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+// import axios from "axios"
 
 const CreateListing = () => {
   const [category, setCategory] = useState("");
@@ -20,40 +24,26 @@ const CreateListing = () => {
     aptSuite: "",
     city: "",
     state: "",
-    country: ""
-  })
-//   console.log(formLocation);
-  
+    country: "",
+  });
+
+  //   console.log(formLocation)
 
   const handleChangeLocation = (e) => {
-    const {name, value } = e.target;
-     setFormLocation({
-        ...formLocation,
-        [name]: value
-     })
-  }
+    const { name, value } = e.target;
 
-  const [details, setDetails] = useState({
-    title: "",
-    description: "",
-    price: 0
-  })
-//   console.log(details);
-  
-
-  const detailsHandler = (e) => {
-    const {name, value} = e.target;
-    setDetails({
-        ...details,
-        [name]: value,
-    })
-  }
+    setFormLocation({
+      ...formLocation,
+      [name]: value,
+    });
+  };
 
   const [amenities, setAminities] = useState([]);
+
   const handleSelectAmenities = (facility) => {
     if (amenities.includes(facility)) {
-      setAminities((prevAmen) =>
-        prevAmen.filter((option) => option !== facility)
+      setAminities((prevAmenities) =>
+        prevAmenities.filter((option) => option !== facility)
       );
     } else {
       setAminities((prev) => [...prev, facility]);
@@ -64,6 +54,7 @@ const CreateListing = () => {
 
   const handleUploadPhotos = (e) => {
     const newPhotos = e.target.files;
+
     setPhotos((prevPhotos) => [...prevPhotos, ...newPhotos]);
   };
 
@@ -73,49 +64,134 @@ const CreateListing = () => {
     const items = Array.from(photos);
 
     const [reorderedItem] = items.splice(result.source.index, 1);
+
     items.splice(result.destination.index, 0, reorderedItem);
+
     setPhotos(items);
   };
 
-  const handleRemovePhoto = (idToRemove) => {
-    setPhotos((prevPhoto) =>
-      prevPhoto.filter((_, index) => index !== idToRemove)
+  const handleRemovePhoto = (indexToRemove) => {
+    setPhotos((prevPhotos) =>
+      prevPhotos.filter((_, index) => index !== indexToRemove)
     );
   };
+
+  const [formDescription, setFormDescription] = useState({
+    title: "",
+    description: "",
+    price: 0,
+  });
+
+  const handleChangeDescription = (e) => {
+    const { name, value } = e.target;
+
+    setFormDescription({
+      ...formDescription,
+      [name]: value,
+    });
+  };
+
+  const creatorId = useSelector((state) => state?.user?.user?._id);
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const listingForm = new FormData();
+
+      listingForm.append("creator", creatorId);
+      listingForm.append("category", category);
+      listingForm.append("type", type);
+      listingForm.append("streetAddress", formLocation.streetAddress);
+      listingForm.append("aptSuite", formLocation.aptSuite);
+      listingForm.append("city", formLocation.city);
+      listingForm.append("state", formLocation.state);
+      listingForm.append("country", formLocation.country);
+      listingForm.append("guestCount", guestCount);
+      listingForm.append("bedroomCount", bedroomCount);
+      listingForm.append("bedCount", bedCount);
+      listingForm.append("bathroomCount", bathroomCount);
+      listingForm.append("amenities", amenities);
+      listingForm.append("title", formDescription.title);
+      listingForm.append("description", formDescription.description);
+      listingForm.append("price", formDescription.price);
+
+      photos.forEach((photo) => {
+        listingForm.append("listingPhotos", photo);
+      });
+
+      const res = await fetch("http://localhost:3000/api/listing/create", {
+        method: "POST",
+        body: listingForm,
+      });
+
+      if (res.ok) {
+        toast.success("Data created successfully");
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
+
+  //       const res = await axios.post(`http://localhost:3000/api/listing/create`, {
+  //       method: "POST",
+  //       body: listingForm,
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       withCredentials: true,
+  //     })
+  //     if(res.data) {
+  //       console.log(res.data);
+  //       toast.success(res.data.message);
+  //       navigate("/");
+  //     }
+  //   } catch (error) {
+  //      toast.error(error.response.data.message);
+  //   }
+  // }
 
   return (
     <>
       <Navbar />
+
       <div className="bg-gray-300 py-10 px-[20px] lg:px-[40px] pb-30">
         <h1 className="text-slate-700 text-2xl sm:text-3xl font-bold">
           Create Your Listings
         </h1>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="bg-white p-8 rounded-xl mt-10">
             <h2 className="text-slate-700 text-xl font-bold">
               Step 1: Title of the place
             </h2>
+
             <hr className="my-4 border-gray-300" />
+
             <h3 className="text-slate-700 text-lg mt-10 mb-5">
               Select the category.
             </h3>
+
             <div className="flex flex-wrap justify-center items-center gap-5 px-5 md:px-0">
               {categories?.map((item, index) => (
                 <div
-                  key={index}
                   className={`flex flex-col justify-center items-center w-28 h-20 border border-gray-300 rounded-lg cursor-pointer ${
-                    category === item.label ? "border-black bg-gray-300" : ""
+                    category === item.label ? "border-black bg-gray-200" : ""
                   }`}
+                  key={index}
                   onClick={() => setCategory(item.label)}
                 >
                   <div className="text-black text-2xl">{item.icon}</div>
+
                   <p className="font-semibold text-black">{item.label}</p>
                 </div>
               ))}
             </div>
 
-            {/* ----------------  offer section */}
             <h3 className="text-slate-700 text-lg mt-10 mb-5">
               What type of place will offer?
             </h3>
@@ -123,8 +199,8 @@ const CreateListing = () => {
             <div className="flex flex-col gap-5">
               {types?.map((item, index) => (
                 <div
-                  className={`flex justify-between gap-5 items-center max-w-2xl p-4 border border-gray-300 rounded-lg cursor-pointer  ${
-                    type === item.name ? "border-black bg-gray-300" : ""
+                  className={`flex justify-between gap-5 items-center max-w-2xl p-4 border border-gray-300 rounded-lg cursor-pointer ${
+                    type === item.name ? "border-2 border-blue-400 " : ""
                   }`}
                   key={index}
                   onClick={() => setType(item.name)}
@@ -140,7 +216,6 @@ const CreateListing = () => {
               ))}
             </div>
 
-            {/* --------  */}
             <h3 className="text-slate-700 text-lg mt-10 mb-5">
               Where is your place located?
             </h3>
@@ -148,13 +223,14 @@ const CreateListing = () => {
             <div className="max-w-3xl">
               <div className="mb-5">
                 <p className="font-bold mb-2">Street</p>
+
                 <input
                   type="text"
                   placeholder="Street Address"
                   name="streetAddress"
                   required
                   className="border border-gray-300 p-4 rounded-lg w-full text-lg font-semibold focus:outline-none"
-                  value={formLocation.name}
+                  value={formLocation.streetAddress}
                   onChange={handleChangeLocation}
                 />
               </div>
@@ -163,26 +239,28 @@ const CreateListing = () => {
             <div className="max-w-3xl grid grid-cols-1 md:grid-cols-2 gap-10">
               <div className="mb-5">
                 <p className="font-bold mb-2">Appartment</p>
+
                 <input
                   type="text"
                   placeholder="Apartment, Apt, Suite"
                   name="aptSuite"
                   required
-                  className="border border-gray-300 p-4 rounded-lg w-full text-lg font-semibold focus:outline-none"
-                  value={formLocation.name}
+                  className="border border-gray-300 p-4 rounded-lg w-full text-lg font-semibold focus:out"
+                  value={formLocation.aptSuite}
                   onChange={handleChangeLocation}
                 />
               </div>
 
               <div className="mb-5">
                 <p className="font-bold mb-2">City</p>
+
                 <input
                   type="text"
                   placeholder="City"
                   name="city"
                   required
-                  className="border border-gray-300 p-4 rounded-lg w-full text-lg font-semibold focus:outline-none"
-                  value={formLocation.name}
+                  className="border border-gray-300 p-4 rounded-lg w-full text-lg font-semibold focus:out"
+                  value={formLocation.city}
                   onChange={handleChangeLocation}
                 />
               </div>
@@ -191,26 +269,28 @@ const CreateListing = () => {
             <div className="max-w-3xl grid grid-cols-1 md:grid-cols-2 gap-10">
               <div className="mb-5">
                 <p className="font-bold mb-2">State</p>
+
                 <input
                   type="text"
                   placeholder="State"
                   name="state"
                   required
-                  className="border border-gray-300 p-4 rounded-lg w-full text-lg font-semibold focus:outline-none"
-                  value={formLocation.name}
+                  className="border border-gray-300 p-4 rounded-lg w-full text-lg font-semibold focus:out"
+                  value={formLocation.state}
                   onChange={handleChangeLocation}
                 />
               </div>
 
               <div className="mb-5">
                 <p className="font-bold mb-2">Country</p>
+
                 <input
                   type="text"
                   placeholder="Country"
                   name="country"
                   required
-                  className="border border-gray-300 p-4 rounded-lg w-full text-lg font-semibold focus:outline-none"
-                  value={formLocation.name}
+                  className="border border-gray-300 p-4 rounded-lg w-full text-lg font-semibold focus:out"
+                  value={formLocation.country}
                   onChange={handleChangeLocation}
                 />
               </div>
@@ -325,13 +405,12 @@ const CreateListing = () => {
             <div className="flex flex-wrap gap-5">
               {facilities?.map((item, index) => (
                 <div
+                  className={`flex flex-col justify-center items-center w-52 h-24 border border-gray-300 rounded-lg cursor-pointer ${
+                    amenities.includes(item.name)
+                      ? "border-2 border-black bg-gray-200"
+                      : ""
+                  }`}
                   key={index}
-                  className={`flex flex-col justify-center items-center w-52 h-24
-                     border border-gray-300 rounded-lg cursor-pointer ${
-                       amenities.includes(item.name)
-                         ? "border border-black bg-gray-200"
-                         : ""
-                     } `}
                   onClick={() => handleSelectAmenities(item.name)}
                 >
                   <div className="text-2xl">{item.icon}</div>
@@ -453,24 +532,25 @@ const CreateListing = () => {
                 name="title"
                 required
                 className="border border-gray-300 p-4 rounded-lg font-semibold w-full sm:w-96"
-                value={details.name}
-                onChange={detailsHandler}
+                value={formDescription.title}
+                onChange={handleChangeDescription}
               />
+
               <p className="font-bold my-4">Description</p>
 
               <textarea
                 type="text"
                 rows={5}
                 placeholder="Title"
-                resize="none"
                 name="description"
                 required
-                className="border border-gray-300 p-4 rounded-lg font-semibold w-full sm:w-96 resize-none"
-                value={details.name}
-                onChange={detailsHandler}
+                className="border border-gray-300 p-4 rounded-lg font-semibold w-full sm:w-96"
+                value={formDescription.description}
+                onChange={handleChangeDescription}
               />
 
               <p className="font-bold my-4">Price</p>
+
               <div className="flex items-center">
                 <span className="text-xl font-bold mr-4">Rs.</span>
 
@@ -480,12 +560,13 @@ const CreateListing = () => {
                   name="price"
                   required
                   className="border border-gray-300 p-4 rounded-lg font-semibold w-40"
-                  value={details.name}
-                  onChange={detailsHandler}
+                  value={formDescription.price}
+                  onChange={handleChangeDescription}
                 />
               </div>
             </div>
           </div>
+
           <button className="mt-10 bg-blue-800 text-white py-2 px-6 rounded-lg hover:shadow-2xl uppercase">
             Create Your Listing
           </button>
