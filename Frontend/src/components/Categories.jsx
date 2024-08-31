@@ -18,10 +18,9 @@ const Categories = () => {
 
       <div className="flex flex-wrap py-12 justify-center gap-5">
         {categories?.slice(1, 7).map((category, index) => (
-          <Link to={`/listings/category/${category.label}`}>
+          <Link to={`/listings/category/${category.label}`} key={index}>
             <div
               className="relative flex justify-center items-center w-[250px] h-[200px] cursor-pointer"
-              key={index}
             >
               <img
                 src={category.img}

@@ -8,10 +8,6 @@ const Listings = () => {
   const [selectedCategory, setSelectedCategory] = useState("All")
 
   const listings = useSelector((state) => state?.listings?.listings)
-  // const listings = useSelector(store => store.listings);
-
-  // console.log(listings)
-
   const dispatch = useDispatch();
   const getListings = async () => {
     try {
@@ -30,11 +26,8 @@ const Listings = () => {
     }
   }
 
-
   useEffect(() => {
-    // console.log("I am running")
     getListings()
-    // console.log("I am running")
   }, [selectedCategory])
 
   return (
