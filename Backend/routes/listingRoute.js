@@ -2,6 +2,7 @@ import express from "express"
 import multer from "multer"
 import {
   createListing,
+  getListingDetails,
   getListings,
 } from "../controller/listingController.js"
 
@@ -19,8 +20,9 @@ const upload = multer({ storage })
 
 const router = express.Router()
 
-router.post("/create", upload.array("listingPhotos"), createListing)
-router.get("/", getListings)
+router.post("/create", upload.array("listingPhotos"), createListing);
+router.get("/", getListings);
+router.get("/:listingId", getListingDetails);
 
 
 export default router

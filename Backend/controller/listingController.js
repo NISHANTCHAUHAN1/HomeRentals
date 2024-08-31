@@ -1,4 +1,5 @@
 import Listing from "../models/listing.model.js"
+import TryCatch from "../utils/TryCatch.js"
 
 export const createListing = async (req, res) => {
   try {
@@ -74,5 +75,11 @@ export const getListings = async (req, res, next) => {
     next(error)
   }
 }
+
+export const getListingDetails = TryCatch(async(req,res) => {
+  const {listingId} = req.params
+  const listing = await Listing.findById(listingId).populate("creator");
+  res.status(200).json({listing});
+})
 
 
