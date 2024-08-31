@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from "mongoose"
 
 const listingSchema = new mongoose.Schema(
   {
@@ -89,4 +89,4 @@ const listingSchema = new mongoose.Schema(
 
 const Listing = mongoose.model("Listing", listingSchema)
 
-export default Listing;
+export default Listing

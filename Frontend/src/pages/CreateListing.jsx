@@ -1,23 +1,21 @@
-import React, { useState } from "react";
-import Navbar from "../components/Navbar";
-import { categories, facilities, types } from "../data";
-import { MdAddCircleOutline, MdRemoveCircleOutline } from "react-icons/md";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { IoIosImages } from "react-icons/io";
-import { BiTrash } from "react-icons/bi";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
-// import axios from "axios"
+import React, { useState } from "react"
+import Navbar from "../components/Navbar"
+import { categories, facilities, types } from "../data"
+import { MdAddCircleOutline, MdRemoveCircleOutline } from "react-icons/md"
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
+import { IoIosImages } from "react-icons/io"
+import { BiTrash } from "react-icons/bi"
+import { useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 
 const CreateListing = () => {
-  const [category, setCategory] = useState("");
-  const [type, setType] = useState("");
+  const [category, setCategory] = useState("")
+  const [type, setType] = useState("")
 
-  const [guestCount, setGuestCount] = useState(1);
-  const [bedroomCount, setBedroomCount] = useState(1);
-  const [bedCount, setBedCount] = useState(1);
-  const [bathroomCount, setBathroomCount] = useState(1);
+  const [guestCount, setGuestCount] = useState(1)
+  const [bedroomCount, setBedroomCount] = useState(1)
+  const [bedCount, setBedCount] = useState(1)
+  const [bathroomCount, setBathroomCount] = useState(1)
 
   const [formLocation, setFormLocation] = useState({
     streetAddress: "",
@@ -25,135 +23,116 @@ const CreateListing = () => {
     city: "",
     state: "",
     country: "",
-  });
+  })
 
   //   console.log(formLocation)
 
   const handleChangeLocation = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
 
     setFormLocation({
       ...formLocation,
       [name]: value,
-    });
-  };
+    })
+  }
 
-  const [amenities, setAminities] = useState([]);
+  const [amenities, setAminities] = useState([])
 
   const handleSelectAmenities = (facility) => {
     if (amenities.includes(facility)) {
       setAminities((prevAmenities) =>
         prevAmenities.filter((option) => option !== facility)
-      );
+      )
     } else {
-      setAminities((prev) => [...prev, facility]);
+      setAminities((prev) => [...prev, facility])
     }
-  };
+  }
 
-  const [photos, setPhotos] = useState([]);
+  const [photos, setPhotos] = useState([])
 
   const handleUploadPhotos = (e) => {
-    const newPhotos = e.target.files;
+    const newPhotos = e.target.files
 
-    setPhotos((prevPhotos) => [...prevPhotos, ...newPhotos]);
-  };
+    setPhotos((prevPhotos) => [...prevPhotos, ...newPhotos])
+  }
 
   const handleDragPhoto = (result) => {
-    if (!result.destination) return;
+    if (!result.destination) return
 
-    const items = Array.from(photos);
+    const items = Array.from(photos)
 
-    const [reorderedItem] = items.splice(result.source.index, 1);
+    const [reorderedItem] = items.splice(result.source.index, 1)
 
-    items.splice(result.destination.index, 0, reorderedItem);
+    items.splice(result.destination.index, 0, reorderedItem)
 
-    setPhotos(items);
-  };
+    setPhotos(items)
+  }
 
   const handleRemovePhoto = (indexToRemove) => {
     setPhotos((prevPhotos) =>
       prevPhotos.filter((_, index) => index !== indexToRemove)
-    );
-  };
+    )
+  }
 
   const [formDescription, setFormDescription] = useState({
     title: "",
     description: "",
     price: 0,
-  });
+  })
 
   const handleChangeDescription = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
 
     setFormDescription({
       ...formDescription,
       [name]: value,
-    });
-  };
+    })
+  }
 
-  const creatorId = useSelector((state) => state?.user?.user?._id);
+  const creatorId = useSelector((state) => state?.user?.user?._id)
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     try {
-      const listingForm = new FormData();
+      const listingForm = new FormData()
 
-      listingForm.append("creator", creatorId);
-      listingForm.append("category", category);
-      listingForm.append("type", type);
-      listingForm.append("streetAddress", formLocation.streetAddress);
-      listingForm.append("aptSuite", formLocation.aptSuite);
-      listingForm.append("city", formLocation.city);
-      listingForm.append("state", formLocation.state);
-      listingForm.append("country", formLocation.country);
-      listingForm.append("guestCount", guestCount);
-      listingForm.append("bedroomCount", bedroomCount);
-      listingForm.append("bedCount", bedCount);
-      listingForm.append("bathroomCount", bathroomCount);
-      listingForm.append("amenities", amenities);
-      listingForm.append("title", formDescription.title);
-      listingForm.append("description", formDescription.description);
-      listingForm.append("price", formDescription.price);
+      listingForm.append("creator", creatorId)
+      listingForm.append("category", category)
+      listingForm.append("type", type)
+      listingForm.append("streetAddress", formLocation.streetAddress)
+      listingForm.append("aptSuite", formLocation.aptSuite)
+      listingForm.append("city", formLocation.city)
+      listingForm.append("state", formLocation.state)
+      listingForm.append("country", formLocation.country)
+      listingForm.append("guestCount", guestCount)
+      listingForm.append("bedroomCount", bedroomCount)
+      listingForm.append("bedCount", bedCount)
+      listingForm.append("bathroomCount", bathroomCount)
+      listingForm.append("amenities", amenities)
+      listingForm.append("title", formDescription.title)
+      listingForm.append("description", formDescription.description)
+      listingForm.append("price", formDescription.price)
 
       photos.forEach((photo) => {
-        listingForm.append("listingPhotos", photo);
-      });
+        listingForm.append("listingPhotos", photo)
+      })
 
       const res = await fetch("http://localhost:3000/api/listing/create", {
         method: "POST",
         body: listingForm,
-      });
+      })
 
       if (res.ok) {
-        toast.success("Data created successfully");
-        navigate("/");
+        console.log("Data created successfully")
+        navigate("/")
       }
     } catch (error) {
-      console.log(error);
-      toast.error(error.response.data.message);
+      console.log(error)
     }
-  };
-
-  //       const res = await axios.post(`http://localhost:3000/api/listing/create`, {
-  //       method: "POST",
-  //       body: listingForm,
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       withCredentials: true,
-  //     })
-  //     if(res.data) {
-  //       console.log(res.data);
-  //       toast.success(res.data.message);
-  //       navigate("/");
-  //     }
-  //   } catch (error) {
-  //      toast.error(error.response.data.message);
-  //   }
-  // }
+  }
 
   return (
     <>
@@ -180,7 +159,7 @@ const CreateListing = () => {
               {categories?.map((item, index) => (
                 <div
                   className={`flex flex-col justify-center items-center w-28 h-20 border border-gray-300 rounded-lg cursor-pointer ${
-                    category === item.label ? "border-black bg-gray-200" : ""
+                    category === item.label ? "border-red-500 bg-gray-200" : ""
                   }`}
                   key={index}
                   onClick={() => setCategory(item.label)}
@@ -200,7 +179,7 @@ const CreateListing = () => {
               {types?.map((item, index) => (
                 <div
                   className={`flex justify-between gap-5 items-center max-w-2xl p-4 border border-gray-300 rounded-lg cursor-pointer ${
-                    type === item.name ? "border-2 border-blue-400 " : ""
+                    type === item.name ? "border-red-500 " : ""
                   }`}
                   key={index}
                   onClick={() => setType(item.name)}
@@ -308,7 +287,7 @@ const CreateListing = () => {
                   <MdRemoveCircleOutline
                     className="text-2xl cursor-pointer hover:text-red-500"
                     onClick={() => {
-                      guestCount > 1 && setGuestCount(guestCount - 1);
+                      guestCount > 1 && setGuestCount(guestCount - 1)
                     }}
                   />
 
@@ -317,7 +296,7 @@ const CreateListing = () => {
                   <MdAddCircleOutline
                     className="text-2xl cursor-pointer hover:text-red-500"
                     onClick={() => {
-                      setGuestCount(guestCount + 1);
+                      setGuestCount(guestCount + 1)
                     }}
                   />
                 </div>
@@ -330,7 +309,7 @@ const CreateListing = () => {
                   <MdRemoveCircleOutline
                     className="text-2xl cursor-pointer hover:text-red-500"
                     onClick={() => {
-                      bedroomCount > 1 && setBedroomCount(bedroomCount - 1);
+                      bedroomCount > 1 && setBedroomCount(bedroomCount - 1)
                     }}
                   />
 
@@ -339,7 +318,7 @@ const CreateListing = () => {
                   <MdAddCircleOutline
                     className="text-2xl cursor-pointer hover:text-red-500"
                     onClick={() => {
-                      setBedroomCount(bedroomCount + 1);
+                      setBedroomCount(bedroomCount + 1)
                     }}
                   />
                 </div>
@@ -352,7 +331,7 @@ const CreateListing = () => {
                   <MdRemoveCircleOutline
                     className="text-2xl cursor-pointer hover:text-red-500"
                     onClick={() => {
-                      bedCount > 1 && setBedCount(bedCount - 1);
+                      bedCount > 1 && setBedCount(bedCount - 1)
                     }}
                   />
 
@@ -361,7 +340,7 @@ const CreateListing = () => {
                   <MdAddCircleOutline
                     className="text-2xl cursor-pointer hover:text-red-500"
                     onClick={() => {
-                      setBedCount(bedCount + 1);
+                      setBedCount(bedCount + 1)
                     }}
                   />
                 </div>
@@ -374,7 +353,7 @@ const CreateListing = () => {
                   <MdRemoveCircleOutline
                     className="text-2xl cursor-pointer hover:text-red-500"
                     onClick={() => {
-                      bathroomCount > 1 && setBathroomCount(bathroomCount - 1);
+                      bathroomCount > 1 && setBathroomCount(bathroomCount - 1)
                     }}
                   />
 
@@ -383,7 +362,7 @@ const CreateListing = () => {
                   <MdAddCircleOutline
                     className="text-2xl cursor-pointer hover:text-red-500"
                     onClick={() => {
-                      setBathroomCount(bathroomCount + 1);
+                      setBathroomCount(bathroomCount + 1)
                     }}
                   />
                 </div>
@@ -407,7 +386,7 @@ const CreateListing = () => {
                 <div
                   className={`flex flex-col justify-center items-center w-52 h-24 border border-gray-300 rounded-lg cursor-pointer ${
                     amenities.includes(item.name)
-                      ? "border-2 border-black bg-gray-200"
+                      ? "border-2 border-red-500 bg-gray-200"
                       : ""
                   }`}
                   key={index}
@@ -573,7 +552,7 @@ const CreateListing = () => {
         </form>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default CreateListing;
+export default CreateListing
