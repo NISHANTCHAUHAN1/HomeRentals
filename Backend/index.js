@@ -21,9 +21,11 @@ app.use(cookieParser());
 
 import userRoute from "./routes/authRoute.js";
 import listingRoute from "./routes/listingRoute.js";
+import bookRoute from "./routes/bookRoute.js";
 
 app.use("/api/user", userRoute);
 app.use("/api/listing", listingRoute);
+app.use("/api/booking", bookRoute);
 
 const port = process.env.PORT || 3000;
 
