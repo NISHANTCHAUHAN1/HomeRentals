@@ -79,7 +79,7 @@ export const getListings = async (req, res, next) => {
 export const getListingDetails = TryCatch(async(req,res) => {
   const {listingId} = req.params
   const listing = await Listing.findById(listingId).populate("creator");
-  res.status(200).json({listing});
+  res.status(200).json(listing);
 })
 
 
