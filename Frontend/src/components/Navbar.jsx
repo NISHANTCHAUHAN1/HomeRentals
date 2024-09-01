@@ -6,6 +6,7 @@ import { IoMdMenu } from "react-icons/io";
 
 const Navbar = () => {
   const { user } = useSelector((store) => store.user);
+
   const [dropdownMenu, setDropDownMenu] = useState(false);
 
   return (

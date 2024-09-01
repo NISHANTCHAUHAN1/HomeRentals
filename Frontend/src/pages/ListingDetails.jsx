@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 const ListingDetails = () => {
   const { listingId } = useParams();
   const [listing, setListing] = useState(null);
-  console.log(listing);
+  // console.log(listing);
 
   const getListingDetails = async () => {
     try {

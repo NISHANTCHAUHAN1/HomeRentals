@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from "axios";
 import { useDispatch, useSelector } from 'react-redux';
-import { setAuthUser } from '../redux/userSlice';
+// import { setAuthUser } from '../redux/userSlice';
+import {setAuthUser } from "../redux/userSlice"
 import toast from 'react-hot-toast';
 
 const LoginPage = () => {

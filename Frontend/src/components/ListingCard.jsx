@@ -92,12 +92,29 @@ const ListingCard = ({
       </h3>
       <p className="text-base text-slate-700">{category}</p>
 
-      <p className="text-base text-slate-700">{type}</p>
+      {!booking ? (
+        <>
+          <p className="text-base text-slate-700">{type}</p>
 
-      <p className="text-base text-slate-700">
-        <span className="font-bold text-lg text-slate-700">₹{price}</span> per
-        night
-      </p>
+          <p className="text-base text-slate-700">
+            <span className="font-bold text-lg text-slate-700">₹{price}</span>{" "}
+            per night
+          </p>
+        </>
+      ) : (
+        <>
+          <p className="text-base text-slate-700">
+            {startDate} - {endDate}{" "}
+          </p>
+
+          <p className="text-base text-slate-700">
+            <span className="font-bold text-lg text-slate-700">
+              ₹ {totalPrice}
+            </span>{" "}
+            per night
+          </p>
+        </>
+      )}
     </div>
   );
 };
