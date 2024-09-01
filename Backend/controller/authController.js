@@ -37,3 +37,12 @@ export const login = TryCatch(async(req,res) => {
     
     res.status(200).json({user, message: "Login Succesfully"});
 });
+
+
+export const logout = async(_,res) => {
+    try {
+        return res.cookie("token", "", {maxAge: 0}).json({message: "logged Out successfuly"});
+    } catch (error) {
+        res.status(500).json({message: "Invaild server error"});
+    }
+}

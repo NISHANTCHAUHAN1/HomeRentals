@@ -36,7 +36,7 @@ const LoginPage = () => {
         // console.log(res.data);
         dispatch(setAuthUser(res.data.user));
         navigate("/");
-        toast.success('Successfully Login!');
+        toast.success(res.data.message);
         setInput({ email: "", password: "" });
       }
     } catch (error) {
