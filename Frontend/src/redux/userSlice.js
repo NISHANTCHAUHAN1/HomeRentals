@@ -5,6 +5,7 @@ const userSlice = createSlice({
     initialState: {
         user: null,
         tripList: null,
+        wishList: null,
     },
     reducers: {
         setAuthUser:(state, action) => {
@@ -13,10 +14,13 @@ const userSlice = createSlice({
         setTripList:(state, action) => {
             state.tripList = action.payload;
         },
+        setWishList:(state, action) => {
+            state.wishList = action.payload;
+        }
     }
 })
 
-export const { setAuthUser, setTripList } = userSlice.actions;
+export const { setAuthUser, setTripList, setWishList } = userSlice.actions;
 
 
 // const initialState = {

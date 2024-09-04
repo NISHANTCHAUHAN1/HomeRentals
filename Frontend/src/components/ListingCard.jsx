@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaArrowLeft, FaArrowRight, FaHeart } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaHeart, FaRegHeart } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { setWishList } from "../redux/userSlice";
+import toast from "react-hot-toast";
 
 const ListingCard = ({
   listingId,
@@ -19,6 +23,7 @@ const ListingCard = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const goToPrevSlide = () => {
     setCurrentIndex(
@@ -34,6 +39,34 @@ const ListingCard = ({
 
   const goToNextSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % listingPhotoPaths.length);
+  };
+
+  //WishList
+  const user = useSelector((store) => store?.user?.user);
+  // console.log(user);
+  const wishList = user?.wishList || [];
+  // console.log(wishList);
+
+  // const isAddToWishList = wishList?.find((item) => item._id === listingId);
+  const isAddToWishList = wishList?.find((item) => item?._id === listingId)
+
+  const addRemovetowishList = async () => {
+    if (user?._id !== creator._id) {
+      const response = await fetch(
+        `http://localhost:3000/api/userlist/${user?._id}/${listingId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      const data = await response.json()
+      dispatch(setWishList(data.wishList));
+      toast.success(data.message);
+    } else {
+      return
+    }
   };
 
   return (
@@ -115,8 +148,23 @@ const ListingCard = ({
           </p>
         </>
       )}
+
+      <button
+        className={`absolute right-5 top-5 border-none text-2xl cursor-pointer z-[999] bg-none ${
+          isAddToWishList ? <FaRegHeart /> : "text-white"
+        }`}
+        onClick={(e) => {
+          e.stopPropagation();
+          addRemovetowishList();
+        }}
+        disabled={!user}
+      >
+        <FaHeart />
+      </button>
     </div>
   );
 };
 
 export default ListingCard;
+
+
