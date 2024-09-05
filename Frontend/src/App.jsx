@@ -8,6 +8,7 @@ import ListingDetails from "./pages/ListingDetails"
 import TripList from "./pages/TripList"
 import WishList from "./pages/WishList"
 import Properties from "./pages/Properties"
+import Reservation from "./pages/Reservation"
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/:userId/trips" element={<TripList />} />
         <Route path="/:userId/wishList" element={<WishList />} />
         <Route path="/:userId/properties" element={<Properties />} />
+        <Route path="/:userId/reservations" element={<Reservation />} />
       </Routes>
     </BrowserRouter>
   )
