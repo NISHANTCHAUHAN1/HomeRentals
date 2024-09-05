@@ -7,6 +7,7 @@ import CreateListing from "./pages/CreateListing"
 import ListingDetails from "./pages/ListingDetails"
 import TripList from "./pages/TripList"
 import WishList from "./pages/WishList"
+import Properties from "./pages/Properties"
 
 const App = () => {
   return (
@@ -19,7 +20,7 @@ const App = () => {
         <Route path="/listings/:listingId" element={<ListingDetails />} />
         <Route path="/:userId/trips" element={<TripList />} />
         <Route path="/:userId/wishList" element={<WishList />} />
-
+        <Route path="/:userId/properties" element={<Properties />} />
       </Routes>
     </BrowserRouter>
   )

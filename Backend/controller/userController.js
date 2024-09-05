@@ -34,3 +34,18 @@ export const addListingInWishList = TryCatch(async(req,res) => {
       res.status(200).json({message: "Added To Wishlist",wishList: user.wishList,})
     }
 });
+
+export const getPropertyList = TryCatch(async(req,res) => {
+  // const {userId} = req.params;
+  // const properties = await Listing.findById({creator: userId}).populate("creator");
+  // res.status(200).json(properties);
+
+  const { userId } = req.params
+
+    const properties = await Listing.find({ creator: userId }).populate(
+      "creator"
+    )
+
+    res.status(200).json(properties)
+}); 
+
