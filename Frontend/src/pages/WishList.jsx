@@ -21,7 +21,7 @@ const WishList = () => {
             ({
               _id,
               creator,
-              listingPhotoPaths,
+              listingPhotoPaths, 
               city,
               state,
               country,

@@ -1,41 +1,41 @@
-import React, { useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import Navbar from "../components/Navbar"
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Navbar from "../components/Navbar";
 
-import { setReservationList } from "../redux/userSlice"
-import ListingCard from "../components/ListingCard"
+import { setReservationList } from "../redux/userSlice";
+import ListingCard from "../components/ListingCard";
 
 const ReservationList = () => {
-  const user = useSelector((state) => state.user.user)
+  const user = useSelector((state) => state.user.user);
 
   // const reservationList = useSelector(
   //   (state) => state.user.user.reservationList
   // )
   const reservationList = useSelector((state) => state?.user?.reservationList);
-  console.log(reservationList)
+  console.log(reservationList);
 
-    // console.log(reservationList)
+  // console.log(reservationList)
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const getReservationList = async () => {
     try {
       const response = await fetch(
         `http://localhost:3000/api/userlist/${user._id}/reservations`,
         { method: "GET" }
-      )
+      );
 
-      const data = await response.json()
+      const data = await response.json();
 
-      dispatch(setReservationList(data))
+      dispatch(setReservationList(data));
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
-    getReservationList()
-  }, [])
+    getReservationList();
+  }, []);
 
   return (
     <>
@@ -46,33 +46,45 @@ const ReservationList = () => {
       </h1>
 
       <div className="px-24 pb-28 flex justify-center flex-wrap gap-6">
-        {reservationList?.map(
-          ({
-            listingId,
-            hostId,
-            startDate,
-            endDate,
-            totalPrice,
-            booking = true,
-          }) => (
-            <ListingCard
-              listingId={listingId._id}
-              creator={hostId._id}
-              listingPhotoPaths={listingId.listingPhotoPaths}
-              city={listingId.city}
-              state={listingId.state}
-              country={listingId.country}
-              category={listingId.category}
-              startDate={startDate}
-              endDate={endDate}
-              totalPrice={totalPrice}
-              booking={booking}
-            />
+        {reservationList > 0 ? (
+          reservationList?.map(
+            ({
+              listingId,
+              hostId,
+              startDate,
+              endDate,
+              totalPrice,
+              booking = true,
+            }) => (
+              <ListingCard
+                listingId={listingId._id}
+                creator={hostId._id}
+                listingPhotoPaths={listingId.listingPhotoPaths}
+                city={listingId.city}
+                state={listingId.state}
+                country={listingId.country}
+                category={listingId.category}
+                startDate={startDate}
+                endDate={endDate}
+                totalPrice={totalPrice}
+                booking={booking}
+              />
+            )
           )
+        ) : (
+          <div>
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTcKcoquPvJ-O9WfgEYiUF34hYhzaGcrtamQ&s"
+              alt=""
+            />
+            <h1 className="text-2xl mt-10 text-center text-sky-600">
+              Not Found WishList
+            </h1>
+          </div>
         )}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default ReservationList
+export default ReservationList;

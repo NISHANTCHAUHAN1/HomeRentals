@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 const ListingDetails = () => {
   const { listingId } = useParams();
   const [listing, setListing] = useState(null);
-  // console.log(listing);
+  console.log(listing);
 
   const getListingDetails = async () => {
     try {
@@ -65,11 +65,11 @@ const ListingDetails = () => {
 
   //Booking
   // const {user} = useSelector(store => store?.user?._id);
-  const customerId = useSelector((state) => state?.user?.user?._id)
+  const customerId = useSelector((state) => state?.user?.user?._id);
   // console.log(customerId)
   const navigate = useNavigate();
 
-  const handleSubmit = async() => {
+  const handleSubmit = async () => {
     try {
       const bookingForm = {
         customerId,
@@ -78,20 +78,24 @@ const ListingDetails = () => {
         startDate: dateRange[0].startDate.toDateString(),
         endDate: dateRange[0].endDate.toDateString(),
         totalPrice: listing.price * dayCount,
-      }
-      const res = await axios.post(`http://localhost:3000/api/booking/create`, bookingForm, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      })
-      if(res.data) {
+      };
+      const res = await axios.post(
+        `http://localhost:3000/api/booking/create`,
+        bookingForm,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      if (res.data) {
         navigate(`/${customerId}/trips`);
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <>
@@ -173,6 +177,13 @@ const ListingDetails = () => {
                 </div>
               ))}
             </div>
+            <button
+              className="w-full py-2 px-4 bg-red-600 hover:bg-red-700 text-white
+             font-semibold rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2
+              focus:ring-red-500"
+            >
+              Delete
+            </button>
           </div>
 
           <div>

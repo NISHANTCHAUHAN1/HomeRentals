@@ -51,29 +51,41 @@ const TripList = () => {
       </h1>
 
       <div className="px-24 pb-28 flex justify-center flex-wrap gap-6">
-        {tripList?.map(
-          ({
-            listingId,
-            hostId,
-            startDate,
-            endDate,
-            totalPrice,
-            booking = true,
-          }) => (
-            <ListingCard
-              listingId={listingId?._id}
-              creator={hostId?._id}
-              listingPhotoPaths={listingId?.listingPhotoPaths}
-              city={listingId?.city}
-              state={listingId?.state}
-              country={listingId?.country}
-              category={listingId?.category}
-              startDate={startDate}
-              endDate={endDate}
-              totalPrice={totalPrice}
-              booking={booking}
-            />
+        {tripList.length > 0 ? (
+          tripList?.map(
+            ({
+              listingId,
+              hostId,
+              startDate,
+              endDate,
+              totalPrice,
+              booking = true,
+            }) => (
+              <ListingCard
+                listingId={listingId?._id}
+                creator={hostId?._id}
+                listingPhotoPaths={listingId?.listingPhotoPaths}
+                city={listingId?.city}
+                state={listingId?.state}
+                country={listingId?.country}
+                category={listingId?.category}
+                startDate={startDate}
+                endDate={endDate}
+                totalPrice={totalPrice}
+                booking={booking}
+              />
+            )
           )
+        ) : (
+          <div>
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTcKcoquPvJ-O9WfgEYiUF34hYhzaGcrtamQ&s"
+              alt=""
+            />
+            <h1 className="text-2xl mt-10 text-center text-sky-600">
+              Not Found TripList
+            </h1>
+          </div>
         )}
       </div>
     </>
