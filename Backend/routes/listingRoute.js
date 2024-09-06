@@ -4,6 +4,7 @@ import {
   createListing,
   getListingDetails,
   getListings,
+  getListingsBySearch,
 } from "../controller/listingController.js"
 
 // multer configuration
@@ -23,6 +24,8 @@ const router = express.Router()
 router.post("/create", upload.array("listingPhotos"), createListing);
 router.get("/", getListings);
 router.get("/:listingId", getListingDetails);
+router.get("/search/:search", getListingsBySearch);
+
 
 
 export default router

@@ -28,6 +28,9 @@ const Navbar = () => {
     }
   };
 
+  const [search, setSearch] = useState("");
+  // console.log(serach);
+  
   return (
     <div className="py-[10px] sm:py-[10px] px-[20px] sm:px-[60px] flex justify-between items-center relative ">
       <Link to={"/"} className="flex items-center gap-2">
@@ -47,9 +50,13 @@ const Navbar = () => {
           type="text"
           placeholder="Search ..."
           className="focus:outline-none bg-transparent"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
 
-        <FaSearch className="text-slate-600 w-6 h-6" />
+        <button disabled={search.trim() === ""} onClick={() => navigate(`/listings/search/${search}`)}>
+        <FaSearch className="text-slate-600 w-6 h-6 cursor-pointer" />
+        </button>
       </div>
 
       <div className="flex items-center gap-5">
