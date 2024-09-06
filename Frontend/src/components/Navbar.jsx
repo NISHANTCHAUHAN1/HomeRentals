@@ -101,7 +101,7 @@ const Navbar = () => {
           </div>
         )}
         {dropdownMenu && user && (
-          <div className="absolute bg-white right-15 sm:right-5 top-20 flex flex-col w-48 p-2.5 border border-gray-300 rounded-2xl shadow-lg z-[999]">
+          <div className="absolute bg-white right-6  sm:right-5 top-20 flex flex-col w-48 p-2.5 border border-gray-300 rounded-2xl shadow-lg z-[999]">
             <Link
               to={`/${user?._id}/trips`}
               className="w-full px-4 py-2 text-slate-500 no-underline font-bold hover:text-blue-500"
