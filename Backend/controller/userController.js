@@ -45,9 +45,5 @@ export const getReservationList = TryCatch(async(req,res) => {
   const { userId } =  req.params;
   const reservation = await Booking.find({hostId: userId}).populate("customerId hostId listingId")
   res.status(200).json(reservation);
-
-  // const { userId } = req.params
-  //   const reservations = await Booking.find({ hostId: userId }).populate("customerId hostId listingId")
-  //   res.status(200).json(reservations)
 });
 

@@ -9,6 +9,7 @@ import TripList from "./pages/TripList"
 import WishList from "./pages/WishList"
 import Properties from "./pages/Properties"
 import Reservation from "./pages/Reservation"
+import CategoryPage from "./pages/CategoryPage"
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/create-listing" element={<CreateListing />} />
         <Route path="/listings/:listingId" element={<ListingDetails />} />
+        <Route path="/listings/category/:category" element={<CategoryPage />} />
         <Route path="/:userId/trips" element={<TripList />} />
         <Route path="/:userId/wishList" element={<WishList />} />
         <Route path="/:userId/properties" element={<Properties />} />
