@@ -3,10 +3,15 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import connectDB from './database/db.js';
 import cookieParser from "cookie-parser";
+import path from "path";
 
 dotenv.config();
 
 const app = express();
+
+const __dirname = path.resolve();
+// console.log(__dirname);
+
 
 
 app.use(express.json());
@@ -30,6 +35,11 @@ app.use("/api/booking", bookRoute);
 app.use("/api/userlist", userListRoute);
 
 const port = process.env.PORT || 3000;
+
+app.use(express.static(path.join(__dirname, "/frontend/dist")));
+app.get("*", (req,res)=>{
+    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+})
 
 
 app.listen(port, () => {

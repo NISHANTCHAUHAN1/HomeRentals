@@ -8,7 +8,6 @@ import { setListings } from "../redux/listingSlice";
 const CategoryPage = () => {
   const { category } = useParams();
   const listings = useSelector((state) => state.listings.listings);
-  //   console.log(listings);
   const dispatch = useDispatch();
   const getListingsByCategory = async () => {
     try {

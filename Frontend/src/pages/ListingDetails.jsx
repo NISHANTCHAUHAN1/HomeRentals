@@ -66,11 +66,8 @@ const ListingDetails = () => {
   const dayCount = Math.round(end - start) / (1000 * 60 * 60 * 24);
 
   //Booking
-  // const {user} = useSelector(store => store?.user?._id);
   const customerId = useSelector((state) => state?.user?.user?._id);
   // console.log(customerId)
-  // const listings = useSelector((state) => state?.listings?.listings);
-  // console.log(listings);
   
   const navigate = useNavigate();
 
@@ -182,15 +179,6 @@ const ListingDetails = () => {
                 </div>
               ))}
             </div>
-
-            {/* ---------------------------delete button */}
-            <button
-              className="w-full py-2 px-4 bg-red-600 hover:bg-red-700 text-white
-             font-semibold rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2
-              focus:ring-red-500"
-            >
-              Delete
-            </button>
           </div>
 
           <div>
